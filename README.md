@@ -36,22 +36,21 @@
 ### 首页展示
 
 ![首页展示](src/assets/sampels/首页.png)
+![首页展示](src/assets/sampels/首页2.png)
+![首页展示](src/assets/sampels/首页3.png)
 _首页包含项目介绍和主要功能入口，简洁直观的设计风格。_
 
 ### 独立对话界面
 
-![独立对话界面](src/assets/sampels/独立对话框.png)
+![独立对话界面](src/assets/sampels/blackModel.png)
 _支持多会话管理、消息历史、代码高亮等功能，提供流畅的对话体验。_
 
 ### 内联搜索对话
 
-![内联搜索对话](src/assets/sampels/内联对话框.png)
+![内联搜索对话](src/assets/sampels/快速对话.png)
 _快捷的内联搜索对话框，支持快速检索和问答，提升使用效率。_
 
-### 自动切换深色浅色主题
-![深浅主题切换](src/assets/sampels/blackModel.png)
-_全组件适配舒适护眼暗色主题。_
-## 📦 项目结构
+
 
 ```bash
 src/

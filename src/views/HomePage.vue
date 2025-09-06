@@ -1,14 +1,58 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { Search, ChatLineRound, Document, Setting } from '@element-plus/icons-vue'
+import { Search, Cpu, Lightning, Monitor, Star, ArrowRight } from '@element-plus/icons-vue'
 import SearchDialog from '@/components/SearchDialog.vue'
 
-const searchText = ref('')
 const showSearchDialog = ref(false)
+
+// 特色功能列表
+const features = ref([
+  {
+    icon: Lightning,
+    title: '极速响应',
+    description: '毫秒级响应速度，流式输出让对话更自然',
+    color: '#FFD700'
+  },
+  {
+    icon: Cpu,
+    title: '多模型支持',
+    description: '支持DeepSeek、Qwen-2.5、glm-4等多种先进AI模型',
+    color: '#00CED1'
+  },
+  {
+    icon: Monitor,
+    title: '深色主题',
+    description: '精美的深色模式，保护您的眼睛，提升使用体验',
+    color: '#9370DB'
+  },
+  {
+    icon: Star,
+    title: '智能对话',
+    description: '上下文理解，记忆对话历史，提供连贯的交流体验',
+    color: '#FF6B6B'
+  }
+])
 
 // 处理搜索框点击
 const handleSearchClick = () => {
   showSearchDialog.value = true
+}
+
+// 滚动到功能区域
+const scrollToFeatures = () => {
+  const featuresSection = document.getElementById('features')
+  if (featuresSection) {
+    featuresSection.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
+// 处理键盘事件
+const handleKeydown = (event) => {
+  // Ctrl+K 或 Cmd+K 打开搜索
+  if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+    event.preventDefault()
+    showSearchDialog.value = true
+  }
 }
 
 // 添加点击遮罩层关闭对话框的处理
@@ -25,22 +69,9 @@ const handleClickOutside = (event) => {
   if (
     searchDialog &&
     !searchDialog.contains(event.target) &&
-    !event.target.closest('.search-container')
+    !event.target.closest('.search-box')
   ) {
     showSearchDialog.value = false
-  }
-}
-
-// 处理快捷键
-const handleKeydown = (event) => {
-  // ESC 关闭对话框
-  if (event.key === 'Escape') {
-    showSearchDialog.value = false
-  }
-  // Cmd/Ctrl + K 打开对话框
-  if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
-    event.preventDefault()
-    showSearchDialog.value = true
   }
 }
 
@@ -57,53 +88,130 @@ onUnmounted(() => {
 
 <template>
   <div class="home-page">
-    <header class="header">
-      <div class="header-left">
-        <span class="logo-text">LLM Chat</span>
-      </div>
-      <div class="header-right">
-        <div class="search-container" @click="handleSearchClick">
-          <div class="search-input">
+    <!-- 导航栏 -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <span class="brand-icon">🚀</span>
+          <span class="brand-text">AI智聊</span>
+        </div>
+        <div class="nav-actions">
+          <div class="search-box" @click="handleSearchClick">
             <el-icon class="search-icon"><Search /></el-icon>
-            <input type="text" placeholder="搜索" readonly v-model="searchText" />
-            <div class="shortcut-key">⌘ K</div>
+            <span class="search-placeholder">快速搜索...</span>
+            <kbd class="kbd">Ctrl+K</kbd>
           </div>
+          <a href="https://github.com/huanz1234/felix-lml-chat" target="_blank" class="github-btn">
+            <img src="@/assets/photo/github.png" alt="GitHub" class="github-icon" />
+          </a>
         </div>
-        <a href="https://github.com/huanz1234/felix-lml-chat" target="_blank" class="github-link">
-          <img src="@/assets/photo/github.png" alt="GitHub" class="github-icon" />
-        </a>
       </div>
-    </header>
+    </nav>
 
-    <!-- 添加主体内容 -->
-    <main class="main-content">
-      <div class="hero-section">
-        <h1 class="title">欢迎使用 LLM Chat</h1>
-        <p class="description">一个强大的 AI 聊天助手，基于大语言模型，为您提供智能对话体验</p>
-        <div class="features">
-          <div class="feature-item">
-            <el-icon class="feature-icon"><ChatLineRound /></el-icon>
-            <h3>智能对话</h3>
-            <p>自然流畅的对话体验，理解上下文</p>
+    <!-- 主要内容区域 -->
+    <main class="main-container">
+      <!-- 英雄区域 -->
+      <section class="hero-area">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="badge-text">✨ 全新AI对话体验</span>
           </div>
-          <div class="feature-item">
-            <el-icon class="feature-icon"><Document /></el-icon>
-            <h3>文件支持</h3>
-            <p>支持多种格式文件上传，增强信息输入</p>
-            <p class="note">注意：由于接口限制，后台无法读取到文件内容</p>
+          <h1 class="hero-title">
+            与AI智能助手
+            <span class="gradient-text">开启对话</span>
+          </h1>
+          <p class="hero-subtitle">
+            体验下一代人工智能对话系统，支持多种大语言模型，
+            <br />为您提供专业、智能、高效的AI助手服务
+          </p>
+          
+          <!-- CTA按钮组 -->
+          <div class="cta-group">
+            <router-link to="/chat" class="primary-btn">
+              <span class="btn-text">立即开始</span>
+              <el-icon class="btn-icon"><ArrowRight /></el-icon>
+            </router-link>
+            <button class="secondary-btn" @click="scrollToFeatures">
+              <span>了解更多</span>
+            </button>
           </div>
-          <div class="feature-item">
-            <el-icon class="feature-icon"><Setting /></el-icon>
-            <h3>个性化设置</h3>
-            <p>可自定义的对话参数，满足不同场景需求</p>
-            <p class="note" style="color: #3f7af1">支持 deepseek_r1 模型</p>
+
+          <!-- 统计数据 -->
+          <div class="stats-row">
+            <div class="stat-item">
+              <div class="stat-number">7+</div>
+              <div class="stat-label">AI模型</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">24/7</div>
+              <div class="stat-label">在线服务</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">∞</div>
+              <div class="stat-label">对话次数</div>
+            </div>
           </div>
         </div>
-        <router-link to="/chat" class="start-button">
-          <span class="mirror-text">开始对话</span>
-          <div class="liquid"></div>
-        </router-link>
-      </div>
+        
+        <!-- 背景装饰 -->
+        <div class="hero-decoration">
+          <div class="floating-card card-1">
+            <div class="card-content">
+              <div class="card-icon">💡</div>
+              <div class="card-text">智能问答</div>
+            </div>
+          </div>
+          <div class="floating-card card-2">
+            <div class="card-content">
+              <div class="card-icon">⚡</div>
+              <div class="card-text">极速响应</div>
+            </div>
+          </div>
+          <div class="floating-card card-3">
+            <div class="card-content">
+              <div class="card-icon">🎨</div>
+              <div class="card-text">深色主题</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 特色功能区域 -->
+      <section class="features-section" id="features">
+        <div class="section-header">
+          <h2 class="section-title">核心特色</h2>
+          <p class="section-subtitle">为什么选择我们的AI助手？</p>
+        </div>
+        
+        <div class="features-grid">
+          <div 
+            v-for="(feature, index) in features" 
+            :key="index"
+            class="feature-card"
+            :style="{ '--delay': index * 0.1 + 's' }"
+          >
+            <div class="feature-icon-wrapper" :style="{ '--color': feature.color }">
+              <el-icon class="feature-icon">
+                <component :is="feature.icon" />
+              </el-icon>
+            </div>
+            <h3 class="feature-title">{{ feature.title }}</h3>
+            <p class="feature-desc">{{ feature.description }}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 底部CTA -->
+      <section class="bottom-cta">
+        <div class="cta-content">
+          <h2 class="cta-title">准备好开始了吗？</h2>
+          <p class="cta-subtitle">立即体验智能AI对话，开启您的AI助手之旅</p>
+          <router-link to="/chat" class="cta-button">
+            <span>开始对话</span>
+            <div class="button-glow"></div>
+          </router-link>
+        </div>
+      </section>
     </main>
 
     <!-- 搜索对话框 -->
@@ -119,336 +227,541 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .home-page {
-  min-height: 100vh; // 确保页面至少占满整个视口高度
-  background-color: var(--bg-color); // 使用主题背景色
+  min-height: 100vh;
+  background: var(--bg-color);
+  overflow-x: hidden;
 }
 
-.header {
-  height: 64px; // 固定头部高度
-  padding: 0 32px; // 左右内边距
-  display: flex; // 使用弹性布局
-  align-items: center; // 垂直居中
-  justify-content: space-between; // 两端对齐
-  border-bottom: 1px solid var(--border-color); // 底部边框
-  background-color: var(--bg-color); // 头部背景色
-
-  .header-left {
-    flex-shrink: 0; // 防止logo被压缩
-    .logo-text {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-color-primary);
-      cursor: pointer;
-      user-select: none;
-      white-space: nowrap; // 防止文字换行
+// 导航栏样式
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(var(--bg-color-rgb), 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    .brand-icon {
+      font-size: 24px;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .brand-text {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
     }
   }
+  
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: var(--code-header-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+    
+    &:hover {
+      border-color: var(--el-color-primary);
+      box-shadow: 0 0 0 3px rgba(103, 126, 234, 0.1);
+    }
+    
+    .search-icon {
+      color: var(--text-color-secondary);
+      font-size: 16px;
+    }
+    
+    .search-placeholder {
+      flex: 1;
+      color: var(--text-color-secondary);
+      font-size: 14px;
+    }
+    
+    .kbd {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 12px;
+      color: var(--text-color-secondary);
+    }
+  }
+  
+  .github-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--code-header-bg);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .github-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
 
-  .header-right {
-    display: flex; // 使用弹性布局
-    align-items: center; // 垂直居中对齐
-    gap: 16px; // 子元素之间的间距
-    flex: 1; // 占据剩余空间
-    justify-content: flex-end; // 右对齐
+// 主容器
+.main-container {
+  padding-top: 70px;
+}
 
-    .search-container {
-      flex: 1; // 搜索框容器占据剩余空间
-      max-width: 280px; // 最大宽度限制
-      min-width: 40px; // 减小最小宽度
-      margin-left: 16px; // 与logo保持距离
-
-      .search-input {
-        display: flex; // 搜索框内部使用弹性布局
-        align-items: center; // 搜索框内部元素垂直居中
-        // max-width: 240px; // 搜索框最小宽度
-        // min-width: 100px; // 搜索框最大宽度
-
-        width: 100%; // 搜索框宽度填充容器
-        height: 32px; // 搜索框固定高度
-        padding: 0 12px; // 左右内边距
-        border-radius: 6px; // 圆角边框
-        background-color: var(--code-header-bg); // 搜索框背景色
-
-        .search-icon {
-          flex-shrink: 0; // 防止图标被压缩
-          font-size: 14px; // 搜索图标大小
-          color: var(--text-color-secondary); // 搜索图标颜色
-          margin-right: 8px; // 图标右侧间距
-        }
-
-        input {
-          flex: 1; // 输入框占据剩余空间
-          width: 0; // 添加这行，强制输入框从0开始计算宽度
-          min-width: 0; // 防止输入框溢出
-          border: none; // 移除输入框边框
-          outline: none; // 移除输入框轮廓
-          background: none; // 移除输入框背景
-          font-size: 13px; // 输入框字体大小
-          color: var(--text-color-primary); // 输入框文本颜色
-
-          &::placeholder {
-            color: var(--text-color-secondary); // 占位符颜色
-          }
-        }
-
-        .shortcut-key {
-          flex-shrink: 0; // 防止快捷键被压缩
-          font-size: 12px; // 快捷键文本大小
-          color: var(--text-color-primary); // 快捷键文本颜色
-          background-color: var(--bg-color); // 快捷键背景
-          padding: 2px 4px; // 快捷键内边距
-          border-radius: 4px; // 快捷键圆角
-          border: 1.5px solid var(--border-color); // 边框
-        }
+// 英雄区域
+.hero-area {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  background: linear-gradient(135deg, 
+    rgba(103, 126, 234, 0.05) 0%, 
+    rgba(118, 75, 162, 0.05) 100%);
+  
+  .hero-content {
+    text-align: center;
+    max-width: 800px;
+    z-index: 2;
+  }
+  
+  .hero-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50px;
+    margin-bottom: 32px;
+    animation: fadeInUp 0.8s ease-out;
+    
+    .badge-text {
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+  
+  .hero-title {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    color: var(--text-color-primary);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  
+  .hero-subtitle {
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--text-color-secondary);
+    margin-bottom: 48px;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+  }
+  
+  .cta-group {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 64px;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+    flex-wrap: wrap;
+  }
+  
+  .primary-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(103, 126, 234, 0.3);
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(103, 126, 234, 0.4);
+    }
+    
+    .btn-icon {
+      transition: transform 0.3s ease;
+    }
+    
+    &:hover .btn-icon {
+      transform: translateX(4px);
+    }
+  }
+  
+  .secondary-btn {
+    padding: 16px 32px;
+    background: transparent;
+    color: var(--text-color-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      border-color: var(--el-color-primary);
+      color: var(--el-color-primary);
+      transform: translateY(-2px);
+    }
+  }
+  
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 64px;
+    animation: fadeInUp 0.8s ease-out 0.8s both;
+    flex-wrap: wrap;
+    
+    .stat-item {
+      text-align: center;
+      
+      .stat-number {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--el-color-primary);
+        margin-bottom: 8px;
+      }
+      
+      .stat-label {
+        font-size: 14px;
+        color: var(--text-color-secondary);
+        font-weight: 500;
       }
     }
-
-    .github-link {
-      display: flex; // 使用弹性布局
-      align-items: center; // 垂直居中对齐
-      height: 32px; // 与搜索框保持相同高度
-      flex-shrink: 0; // 防止github图标被压缩
-    }
-
-    .github-icon {
-      width: 22px; // 图标宽度
-      height: 22px; // 图标高度
-      cursor: pointer; // 鼠标指针样式
-      opacity: 1; // 不透明度
+  }
+  
+  // 浮动卡片装饰
+  .hero-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    
+    .floating-card {
+      position: absolute;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      
+      .card-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        
+        .card-icon {
+          font-size: 24px;
+        }
+        
+        .card-text {
+          font-weight: 600;
+          color: var(--text-color-primary);
+          font-size: 14px;
+        }
+      }
+      
+      &.card-1 {
+        top: 20%;
+        left: 10%;
+        animation: float 6s ease-in-out infinite;
+      }
+      
+      &.card-2 {
+        top: 30%;
+        right: 15%;
+        animation: float 6s ease-in-out infinite 2s;
+      }
+      
+      &.card-3 {
+        bottom: 25%;
+        left: 15%;
+        animation: float 6s ease-in-out infinite 4s;
+      }
     }
   }
 }
 
-.main-content {
-  padding: 80px 20px;
+// 特色功能区域
+.features-section {
+  padding: 120px 24px;
   max-width: 1200px;
   margin: 0 auto;
-
-  .hero-section {
+  
+  .section-header {
     text-align: center;
-
-    .title {
+    margin-bottom: 80px;
+    
+    .section-title {
       font-size: 48px;
-      font-weight: 700;
+      font-weight: 800;
+      color: var(--text-color-primary);
+      margin-bottom: 16px;
+    }
+    
+    .section-subtitle {
+      font-size: 20px;
+      color: var(--text-color-secondary);
+    }
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px;
+    
+    .feature-card {
+      padding: 40px 32px;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.6s ease-out var(--delay) both;
+      
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        border-color: var(--el-color-primary-light-7);
+      }
+      
+      .feature-icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--color), transparent);
+        margin-bottom: 24px;
+        
+        .feature-icon {
+          font-size: 32px;
+          color: var(--color);
+        }
+      }
+      
+      .feature-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-color-primary);
+        margin-bottom: 16px;
+      }
+      
+      .feature-desc {
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--text-color-secondary);
+      }
+    }
+  }
+}
+
+// 底部CTA
+.bottom-cta {
+  padding: 120px 24px;
+  background: linear-gradient(135deg, 
+    rgba(103, 126, 234, 0.05) 0%, 
+    rgba(118, 75, 162, 0.05) 100%);
+  
+  .cta-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    
+    .cta-title {
+      font-size: 48px;
+      font-weight: 800;
       color: var(--text-color-primary);
       margin-bottom: 24px;
     }
-
-    .description {
+    
+    .cta-subtitle {
       font-size: 20px;
       color: var(--text-color-secondary);
-      max-width: 600px;
-      margin: 0 auto 64px;
-      line-height: 1.5;
+      margin-bottom: 48px;
+      line-height: 1.6;
     }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 40px;
-      margin-bottom: 64px;
-
-      .feature-item {
-        padding: 32px;
-        background: var(--bg-color);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        transition: transform 0.3s ease;
-
-        &:hover {
-          transform: translateY(-4px);
-        }
-
-        .feature-icon {
-          font-size: 32px;
-          color: var(--el-color-primary);
-          margin-bottom: 20px;
-        }
-
-        h3 {
-          font-size: 20px;
-          font-weight: 600;
-          color: var(--text-color-primary);
-          margin-bottom: 12px;
-        }
-
-        p {
-          font-size: 16px;
-          color: var(--text-color-secondary);
-          line-height: 1.5;
-        }
-
-        .note {
-          font-size: 12px;
-          color: var(--text-color-muted);
-          margin-top: 8px;
-          font-style: italic;
-        }
-      }
-    }
-
-    .start-button {
+    
+    .cta-button {
       position: relative;
       display: inline-block;
-      padding: 20px 40px;
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text-color-primary);
-      background: var(--code-header-bg);
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
+      padding: 20px 48px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 50px;
       text-decoration: none;
-      overflow: hidden;
-      cursor: pointer;
+      font-weight: 700;
+      font-size: 18px;
       transition: all 0.3s ease;
-      box-shadow: 0 6px 30px -10px rgba(63, 122, 241, 0.3);
-
-      // 方案3: 镜面文字
-      .mirror-text {
-        position: relative;
-        z-index: 1;
-        color: rgba(255, 255, 255, 0.9);
-        font-weight: 700;
-        text-transform: uppercase;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 1) 0%,
-          rgba(255, 255, 255, 0.8) 50%,
-          rgba(255, 255, 255, 0.6) 100%
-        );
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
-        -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+      overflow: hidden;
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 50px rgba(103, 126, 234, 0.4);
       }
-
-      // 发光效果
-      &::before {
-        content: '';
+      
+      .button-glow {
         position: absolute;
         top: 0;
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        transition: 0.5s ease;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s ease;
       }
-
-      // 液体效果
-      .liquid {
-        position: absolute;
-        top: -80px;
-        left: 0;
-        width: 200px;
-        height: 200px;
-        background: var(--el-color-primary-light-3);
-        box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.3);
-        transition: 0.5s;
-
-        &::before,
-        &::after {
-          content: '';
-          position: absolute;
-          width: 200%;
-          height: 200%;
-          top: 0;
-          left: 50%;
-          transform: translate(-50%, -75%);
-          background: #fff;
-        }
-
-        &::before {
-          border-radius: 45%;
-          animation: animate 5s linear infinite;
-        }
-
-        &::after {
-          border-radius: 40%;
-          animation: animate 10s linear infinite;
-        }
+      
+      &:hover .button-glow {
+        left: 100%;
       }
-
+      
       span {
         position: relative;
         z-index: 1;
-      }
-
-      // 悬停效果
-      &:hover {
-        transform: translateY(-2px);
-        background: var(--el-color-primary);
-        color: #fff;
-        border-color: var(--el-color-primary);
-        box-shadow: 0 10px 40px -10px var(--el-color-primary);
-
-        &::before {
-          left: 100%;
-        }
-
-        .liquid {
-          top: -120px;
-        }
-
-        .mirror-text {
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 1) 0%,
-            rgba(255, 255, 255, 0.9) 50%,
-            rgba(255, 255, 255, 0.7) 100%
-          );
-          background-clip: text;
-          -webkit-background-clip: text;
-          color: transparent;
-          -webkit-text-fill-color: transparent;
-        }
-      }
-
-      // 点击效果
-      &:active {
-        transform: scale(0.98) translateY(0);
-        box-shadow: 0 5px 20px -10px var(--el-color-primary);
-      }
-    }
-
-    // 液体动画
-    @keyframes animate {
-      0% {
-        transform: translate(-50%, -75%) rotate(0deg);
-      }
-      100% {
-        transform: translate(-50%, -75%) rotate(360deg);
       }
     }
   }
 }
 
+// 搜索对话框
 .search-dialog-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(8px);
 }
 
 .search-dialog-container {
   margin-top: 15vh;
   width: 640px;
+  max-width: 90vw;
+}
+
+// 动画
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 // 过渡动画
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .navbar .nav-container {
+    padding: 0 16px;
+  }
+  
+  .hero-area {
+    min-height: 80vh;
+    padding: 0 16px;
+  }
+  
+  .cta-group {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .stats-row {
+    gap: 32px;
+  }
+  
+  .features-section {
+    padding: 80px 16px;
+  }
+  
+  .bottom-cta {
+    padding: 80px 16px;
+  }
+  
+  .search-box {
+    min-width: 150px;
+  }
 }
 </style>
