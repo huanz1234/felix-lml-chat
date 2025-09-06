@@ -153,7 +153,7 @@ pnpm dev
 
 - **作者**: Felix
 - **邮箱**: huanzhang1832601@gmail.com
-- **GitHub**: [felix](https://github.com/felix)
+- **GitHub**: [felix](https://github.com/huanz1234)
 
 ## 📄 开源协议
 
