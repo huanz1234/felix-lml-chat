@@ -166,7 +166,7 @@ const handleFileRemove = (file) => {
       /* 文件预览样式 */
       .file-preview {
         padding: 8px; /* 内边距 */
-        background-color: #f4f4f5; /* 浅灰色背景 */
+        background-color: var(--code-header-bg); /* 使用主题背景色 */
         border-radius: 8px; /* 圆角边框 */
         display: flex; /* 使用弹性布局 */
         align-items: center; /* 垂直居中对齐 */
@@ -182,7 +182,7 @@ const handleFileRemove = (file) => {
 
         /* 文件大小样式 */
         .file-size {
-          color: #909399; /* 浅灰色文字 */
+          color: var(--text-color-secondary); /* 使用主题文字颜色 */
           font-size: 12px; /* 小字体 */
         }
       }

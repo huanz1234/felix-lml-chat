@@ -206,7 +206,7 @@ const handleBack = async () => {
   align-items: center;
   padding: 0.75rem 1rem;
   background-color: var(--bg-color);
-  border-bottom: 1px solid #ffffff;
+  border-bottom: 1px solid var(--border-color);
 
   .header-left {
     display: flex;
@@ -255,14 +255,14 @@ const handleBack = async () => {
 
       /* 未选中状态 */
       border: 1px solid #3f7af1;
-      background-color: #ffffff;
+      background-color: var(--bg-color);
       color: #3f7af1;
 
       /* 鼠标悬停效果 */
       &:hover {
         background-color: #3f7af1;
         border-color: #3f7af1;
-        color: #ffffff;
+        color: var(--bg-color);
       }
 
       /* 图标样式 */
@@ -276,7 +276,7 @@ const handleBack = async () => {
     .divider {
       height: 1.5rem; /* 设置分隔线高度 */
       width: 1px; /* 设置分隔线宽度 */
-      background-color: #e5e7eb; /* 设置分隔线颜色 */
+      background-color: var(--border-color); /* 设置分隔线颜色 */
       margin: 0 0.2rem; /* 设置左右间距 */
     }
 
@@ -361,7 +361,7 @@ const handleBack = async () => {
   flex: 1; /* 占据剩余空间 */
   overflow-y: auto; /* 垂直方向可滚动 */
   padding: 0.6rem; /* 四周内边距 */
-  background-color: var(--bg-color-secondary); /* 使用主题变量设置背景色 */
+  background-color: var(--bg-color); /* 使用主题变量设置背景色 */
 
   /* 设置最大宽度和居中对齐，与输入框保持一致 */
   max-width: 796px; /* 设置最大宽度 */
@@ -375,7 +375,7 @@ const handleBack = async () => {
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #ddd; /* 滚动条滑块颜色 */
+    background-color: var(--border-color); /* 滚动条滑块颜色 */
     border-radius: 3px; /* 滚动条滑块圆角 */
   }
 

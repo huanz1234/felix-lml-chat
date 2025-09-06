@@ -12,6 +12,7 @@ export const useSettingStore = defineStore(
       temperature: 0.7,
       topP: 0.7,
       topK: 50,
+      theme: 'light', // 添加主题设置，默认为浅色模式
     })
 
     return {

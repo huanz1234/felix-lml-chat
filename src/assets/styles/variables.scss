@@ -14,6 +14,11 @@
   --code-border: #ebebeb;
   --code-text: #383a42; /* 添加默认代码文本颜色 - 接近黑色 */
   --code-header-button-hover-bg: #e5e6e8;
+
+  // 主要文本颜色
+  --text-color-primary: #27272a;
+  --text-color-secondary: #71717a;
+  --text-color-muted: #a1a1aa;
 }
 
 /* 代码块的暗色主题 */
@@ -44,5 +49,109 @@
     .code-lang {
       color: var(--code-lang-text);
     }
+  }
+}
+
+/* 深色主题 */
+.dark-theme {
+  // 基础颜色 - 深色主题
+  --text-color: #ffffff;
+  --text-color-primary: #f4f4f5;
+  --text-color-secondary: #a1a1aa;
+  --text-color-muted: #71717a;
+  --bg-color: #18181b;
+  --border-color: #3f3f46;
+
+  // 代码相关颜色 - 深色主题
+  --code-block-bg: #1e1e1e;
+  --code-header-bg: #2d2d30;
+  --code-border: #3e3e42;
+  --code-lang-text: #cccccc;
+  --code-text: #d4d4d4;
+  --code-header-button-hover-bg: #3e3e42;
+
+  // Element Plus 组件深色主题
+  --el-bg-color: #18181b;
+  --el-text-color-primary: #f4f4f5;
+  --el-text-color-regular: #a1a1aa;
+  --el-text-color-secondary: #71717a;
+  --el-border-color: #3f3f46;
+  --el-border-color-light: #52525b;
+  --el-fill-color: #27272a;
+  --el-fill-color-light: #3f3f46;
+  --el-fill-color-lighter: #52525b;
+  --el-fill-color-extra-light: #71717a;
+  --el-color-primary: #3f7af1;
+  
+  // Element Plus 输入框
+  .el-input__wrapper {
+    background-color: var(--bg-color) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 0 0 1px var(--border-color) inset !important;
+  }
+  
+  .el-input__inner {
+    color: var(--text-color-primary) !important;
+    background-color: transparent !important;
+  }
+  
+  .el-textarea__inner {
+    color: var(--text-color-primary) !important;
+    background-color: var(--bg-color) !important;
+    border-color: var(--border-color) !important;
+  }
+  
+  // Element Plus 按钮
+  .el-button {
+    background-color: var(--bg-color) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color-primary) !important;
+  }
+  
+  // Element Plus 抽屉
+  .el-drawer {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color-primary) !important;
+  }
+  
+  .el-drawer__header {
+    color: var(--text-color-primary) !important;
+    border-bottom-color: var(--border-color) !important;
+  }
+  
+  // Element Plus 选择器
+  .el-select-dropdown {
+    background-color: var(--bg-color) !important;
+    border-color: var(--border-color) !important;
+  }
+  
+  .el-select-dropdown__item {
+    color: var(--text-color-primary) !important;
+    
+    &:hover {
+      background-color: var(--border-color) !important;
+    }
+  }
+  
+  // Element Plus 滑块
+  .el-slider__runway {
+    background-color: var(--border-color) !important;
+  }
+  
+  .el-slider__bar {
+    background-color: var(--el-color-primary) !important;
+  }
+  
+  // Element Plus 数字输入框
+  .el-input-number {
+    .el-input__wrapper {
+      background-color: var(--bg-color) !important;
+      border-color: var(--border-color) !important;
+    }
+  }
+  
+  // Element Plus 开关
+  .el-switch {
+    --el-switch-off-color: var(--border-color) !important;
   }
 }

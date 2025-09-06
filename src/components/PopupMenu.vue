@@ -144,9 +144,9 @@ defineExpose({
   top: calc(100% + 12px);
   left: 0;
   width: 200px;
-  background: #f7f7f7;
+  background: var(--bg-color);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -161,7 +161,7 @@ defineExpose({
     .section-title {
       padding: 0.5rem 1rem;
       font-size: 0.75rem;
-      color: #6b7280;
+      color: var(--text-color-secondary);
       font-weight: 500;
     }
 
@@ -188,7 +188,7 @@ defineExpose({
         /* 对话标题文本样式 */
         span {
           font-size: 0.875rem; /* 文字大小 14px */
-          color: #374151; /* 文字颜色：深灰色 */
+          color: var(--text-color-primary); /* 文字颜色 */
         }
       }
 
@@ -229,7 +229,7 @@ defineExpose({
       /* 菜单项悬停和选中状态 */
       &:hover,
       &.active {
-        background-color: #e5e7eb; /* 背景色：浅灰色 */
+        background-color: var(--code-header-bg); /* 背景色 */
 
         /* 显示操作按钮 */
         .item-actions {
@@ -239,7 +239,7 @@ defineExpose({
 
       /* 当前选中项的特殊样式 */
       &.active {
-        background-color: #e5e7eb; /* 背景色：浅灰色 */
+        background-color: var(--code-header-bg); /* 背景色 */
         position: relative; /* 相对定位，用于放置指示条 */
 
         /* 左侧蓝色指示条 */
@@ -270,10 +270,10 @@ defineExpose({
       height: 2.5rem;
       padding: 0.5rem 1rem;
       font-size: 0.875rem;
-      color: #374151;
+      color: var(--text-color-primary);
 
       &:hover {
-        background-color: #e5e7eb;
+        background-color: var(--code-header-bg);
       }
 
       :deep(.el-icon) {
@@ -285,7 +285,7 @@ defineExpose({
 
   .divider {
     height: 1px;
-    background-color: #e5e7eb;
+    background-color: var(--border-color);
     margin: 0.25rem 0;
   }
 }

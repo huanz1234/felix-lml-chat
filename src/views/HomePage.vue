@@ -120,7 +120,7 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .home-page {
   min-height: 100vh; // 确保页面至少占满整个视口高度
-  background-color: var(--el-bg-color); // 使用 Element Plus 的主题背景色
+  background-color: var(--bg-color); // 使用主题背景色
 }
 
 .header {
@@ -129,15 +129,15 @@ onUnmounted(() => {
   display: flex; // 使用弹性布局
   align-items: center; // 垂直居中
   justify-content: space-between; // 两端对齐
-  border-bottom: 1px solid var(--el-border-color); // 底部边框
-  background-color: var(--el-bg-color); // 头部背景色
+  border-bottom: 1px solid var(--border-color); // 底部边框
+  background-color: var(--bg-color); // 头部背景色
 
   .header-left {
     flex-shrink: 0; // 防止logo被压缩
     .logo-text {
       font-size: 20px;
       font-weight: 600;
-      color: #171717;
+      color: var(--text-color-primary);
       cursor: pointer;
       user-select: none;
       white-space: nowrap; // 防止文字换行
@@ -167,12 +167,12 @@ onUnmounted(() => {
         height: 32px; // 搜索框固定高度
         padding: 0 12px; // 左右内边距
         border-radius: 6px; // 圆角边框
-        background-color: #f2f2f2; // Vercel 风格的浅灰色背景
+        background-color: var(--code-header-bg); // 搜索框背景色
 
         .search-icon {
           flex-shrink: 0; // 防止图标被压缩
           font-size: 14px; // 搜索图标大小
-          color: #8f8f8f; // Vercel 风格的图标颜色
+          color: var(--text-color-secondary); // 搜索图标颜色
           margin-right: 8px; // 图标右侧间距
         }
 
@@ -184,21 +184,21 @@ onUnmounted(() => {
           outline: none; // 移除输入框轮廓
           background: none; // 移除输入框背景
           font-size: 13px; // 输入框字体大小
-          color: #000; // Vercel 风格的文本颜色
+          color: var(--text-color-primary); // 输入框文本颜色
 
           &::placeholder {
-            color: #666666; // Vercel 风格的占位符颜色
+            color: var(--text-color-secondary); // 占位符颜色
           }
         }
 
         .shortcut-key {
           flex-shrink: 0; // 防止快捷键被压缩
           font-size: 12px; // 快捷键文本大小
-          color: #171717; // Vercel 风格的快捷键文本颜色
-          background-color: #fafafa; // 快捷键白色背景
+          color: var(--text-color-primary); // 快捷键文本颜色
+          background-color: var(--bg-color); // 快捷键背景
           padding: 2px 4px; // 快捷键内边距
           border-radius: 4px; // 快捷键圆角
-          border: 1.5px solid #dfdfdf; // Vercel 风格的边框
+          border: 1.5px solid var(--border-color); // 边框
         }
       }
     }
@@ -230,13 +230,13 @@ onUnmounted(() => {
     .title {
       font-size: 48px;
       font-weight: 700;
-      color: #1a1a1a;
+      color: var(--text-color-primary);
       margin-bottom: 24px;
     }
 
     .description {
       font-size: 20px;
-      color: #666;
+      color: var(--text-color-secondary);
       max-width: 600px;
       margin: 0 auto 64px;
       line-height: 1.5;
@@ -250,7 +250,8 @@ onUnmounted(() => {
 
       .feature-item {
         padding: 32px;
-        background: #fff;
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease;
@@ -268,19 +269,19 @@ onUnmounted(() => {
         h3 {
           font-size: 20px;
           font-weight: 600;
-          color: #1a1a1a;
+          color: var(--text-color-primary);
           margin-bottom: 12px;
         }
 
         p {
           font-size: 16px;
-          color: #666;
+          color: var(--text-color-secondary);
           line-height: 1.5;
         }
 
         .note {
           font-size: 12px;
-          color: #999;
+          color: var(--text-color-muted);
           margin-top: 8px;
           font-style: italic;
         }
@@ -293,14 +294,15 @@ onUnmounted(() => {
       padding: 20px 40px;
       font-size: 18px;
       font-weight: 600;
-      color: #fff;
-      background: var(--el-color-primary);
+      color: var(--text-color-primary);
+      background: var(--code-header-bg);
+      border: 2px solid var(--border-color);
       border-radius: 12px;
       text-decoration: none;
       overflow: hidden;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 6px 30px -10px var(--el-color-primary);
+      box-shadow: 0 6px 30px -10px rgba(63, 122, 241, 0.3);
 
       // 方案3: 镜面文字
       .mirror-text {
@@ -376,6 +378,9 @@ onUnmounted(() => {
       // 悬停效果
       &:hover {
         transform: translateY(-2px);
+        background: var(--el-color-primary);
+        color: #fff;
+        border-color: var(--el-color-primary);
         box-shadow: 0 10px 40px -10px var(--el-color-primary);
 
         &::before {

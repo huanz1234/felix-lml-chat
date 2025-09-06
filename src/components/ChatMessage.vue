@@ -246,13 +246,11 @@ const renderedReasoning = computed(() => {
   &.is-mine {
     justify-content: flex-end; /* 用户消息靠右对齐 */
 
-    .content .bubble.markdown-body {
-      background-color: #f4f4f4; /* 用户消息背景色 */
-
-      // /* 用户消息中的代码块样式 */
-      // :deep(pre) {
-      //   background-color: var(--code-block-bg);
-      //   border: 1px solid var(--code-border); /* 代码块边框 */
+    .content {
+      .bubble.markdown-body {
+        background-color: var(--bg-color); /* 用户消息背景色 */
+        border: 1px solid var(--border-color);
+      }
       // }
 
       // /* 用户消息中的行内代码样式 */
@@ -295,7 +293,8 @@ const renderedReasoning = computed(() => {
       cursor: pointer;
       width: fit-content;
       border-radius: 4px;
-      background-color: #eef4ff; // 添加浅蓝色背景
+      background-color: var(--bg-color); // 添加背景
+      border: 1px solid var(--border-color);
       transition: background-color 0.2s;
 
       img {
@@ -319,7 +318,7 @@ const renderedReasoning = computed(() => {
       }
 
       &:hover {
-        background-color: #e0ebff; // 调整悬停时的背景色为更深的蓝色
+        background-color: var(--border-color); // 调整悬停时的背景色
       }
     }
 
@@ -327,9 +326,9 @@ const renderedReasoning = computed(() => {
       margin-bottom: 8px; // 与下方内容保持间距
       margin-left: 16px;
       padding: 0 16px; // 内部内容的边距
-      background-color: #ffffff; // 浅灰色背景，类似引用块
-      border-left: 3px solid #dfe2e5; // 左侧边框，是引用块的特征
-      color: #8b8b8b; // 文字颜色设置为深灰色
+      background-color: var(--bg-color); // 背景色
+      border-left: 3px solid var(--border-color); // 左侧边框
+      color: var(--text-color-secondary); // 文字颜色
       font-size: 14px; // 字体大小稍小于正文
       line-height: 1.6; // 行高适中，提高可读性
 
@@ -343,7 +342,7 @@ const renderedReasoning = computed(() => {
 
       // 处理内部行内代码的样式
       :deep(code) {
-        background-color: #f0f0f0; // 代码块的背景色
+        background-color: var(--code-block-bg); // 代码块的背景色
         padding: 2px 4px; // 代码块的内边距
         border-radius: 3px; // 圆角边框
         font-size: 0.9em; // 代码字体稍小
@@ -355,7 +354,9 @@ const renderedReasoning = computed(() => {
       display: block; // 改为块级元素
       width: 100%; // 占满容器宽度
       padding: 0.75rem 1rem; /* 气泡内边距 */
-      background-color: #ffffff; /* AI助手消息背景色 */
+      background-color: var(--bg-color); /* AI助手消息背景色*/
+      border: 1px solid var(--border-color);
+      color: var(--text-color-primary);
       border-radius: 1rem; /* 气泡圆角 */
       font-size: 1rem; /* 普通文字大小16px */
       line-height: 1.5; /* 文字行高 */
@@ -468,7 +469,7 @@ const renderedReasoning = computed(() => {
         font-family: var(--code-font-family); // 使用等宽字体
         padding: 0.2em 0.4em;
         border-radius: 0.25rem;
-        background-color: #f0f0f0;
+        background-color: var(--code-block-bg);
       }
 
       // 列表样式
@@ -592,7 +593,7 @@ const renderedReasoning = computed(() => {
         gap: 0.5rem;
         color: var(--text-color-secondary);
         font-size: 0.75rem;
-        background-color: #f3f4f6;
+        background-color: var(--code-header-bg);
         padding: 0.25rem 0.5rem;
         border-radius: 0.25rem;
       }
@@ -645,7 +646,7 @@ const renderedReasoning = computed(() => {
 
     .file-preview {
       padding: 8px;
-      background-color: #f4f4f5;
+      background-color: var(--code-header-bg);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -659,7 +660,7 @@ const renderedReasoning = computed(() => {
       }
 
       .file-size {
-        color: #909399;
+        color: var(--text-color-secondary);
         font-size: 12px;
       }
     }

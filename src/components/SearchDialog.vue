@@ -193,7 +193,8 @@ const handleRegenerate = async () => {
   max-width: 640px; // 设置最大宽度
   min-width: 320px; // 设置最小宽度
   max-height: 600px;
-  background: #fff;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -203,7 +204,7 @@ const handleRegenerate = async () => {
   .search-header {
     flex-shrink: 0; // 防止头部压缩
     padding: 12px;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid var(--border-color);
 
     .search-input {
       width: 100%;
@@ -220,11 +221,11 @@ const handleRegenerate = async () => {
         outline: none;
         background: none;
         font-size: 1rem;
-        color: #000;
+        color: var(--text-color-primary);
         padding-right: 40px;
 
         &::placeholder {
-          color: #999;
+          color: var(--text-color-secondary);
         }
       }
 
@@ -267,7 +268,7 @@ const handleRegenerate = async () => {
 
     .initial-message {
       padding: 12px 12px;
-      color: #000;
+      color: var(--text-color-primary);
       font-size: 14px;
       line-height: 1.5;
       display: flex;
@@ -283,7 +284,7 @@ const handleRegenerate = async () => {
       .prompt-title {
         padding-left: 12px;
         font-size: 12px;
-        color: #666;
+        color: var(--text-color-secondary);
       }
 
       .prompt-list {
@@ -298,14 +299,14 @@ const handleRegenerate = async () => {
           border: none;
           border-radius: 6px;
           font-size: 14px;
-          color: #000;
+          color: var(--text-color-primary);
           cursor: pointer;
           transition: background-color 0.2s;
           display: flex;
           align-items: center;
 
           &:hover {
-            background-color: #f5f5f5;
+            background-color: var(--code-header-bg);
           }
         }
       }

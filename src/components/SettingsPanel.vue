@@ -8,6 +8,30 @@ const settingStore = useSettingStore()
 // 控制抽屉显示
 const visible = ref(false)
 
+// 主题切换相关
+const isDarkMode = computed({
+  get: () => settingStore.settings.theme === 'dark',
+  set: (value) => {
+    settingStore.settings.theme = value ? 'dark' : 'light'
+  }
+})
+
+// 切换主题方法
+const toggleTheme = (value) => {
+  settingStore.settings.theme = value ? 'dark' : 'light'
+  // 应用主题到document
+  applyTheme(settingStore.settings.theme)
+}
+
+// 应用主题到document
+const applyTheme = (theme) => {
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark-theme')
+  } else {
+    document.documentElement.classList.remove('dark-theme')
+  }
+}
+
 // 计算当前选中模型的最大 tokens
 const currentMaxTokens = computed(() => {
   const selectedModel = modelOptions.find((option) => option.value === settingStore.settings.model)
@@ -43,6 +67,22 @@ defineExpose({
 <template>
   <el-drawer v-model="visible" title="设置" direction="rtl" size="350px">
     <div class="setting-container">
+      <!-- 主题切换 -->
+      <div class="setting-item">
+        <div class="setting-label-row">
+          <div class="label-with-tooltip">
+            <span>深色模式</span>
+            <el-tooltip content="切换深色/浅色主题" placement="top">
+              <el-icon><QuestionFilled /></el-icon>
+            </el-tooltip>
+          </div>
+          <el-switch 
+            v-model="isDarkMode" 
+            @change="toggleTheme"
+          />
+        </div>
+      </div>
+
       <!-- 模型选择 -->
       <div class="setting-item">
         <div class="setting-label">Model</div>
@@ -209,7 +249,8 @@ defineExpose({
 <style lang="scss" scoped>
 .setting-container {
   padding: 20px;
-  color: #27272a;
+  color: var(--text-color-primary);
+  background-color: var(--bg-color);
 }
 
 .setting-item {
@@ -222,7 +263,7 @@ defineExpose({
     gap: 8px;
     margin-bottom: 8px;
     font-weight: 500;
-    color: #27272a;
+    color: var(--text-color-primary);
   }
 
   // 水平布局的标签行，用于标签和控件在同一行的情况
@@ -231,7 +272,7 @@ defineExpose({
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
-    color: #27272a;
+    color: var(--text-color-primary);
 
     // 标签和提示图标的容器
     .label-with-tooltip {
@@ -272,7 +313,59 @@ defineExpose({
 
   // 下拉选项文字颜色
   :deep(.el-select-dropdown__item) {
-    color: #27272a;
+    color: var(--text-color-primary);
+  }
+  
+  // 使用深度选择器强制覆盖Element Plus选择框 - 基于实际DOM结构
+  :deep(.el-select__wrapper) {
+    background-color: var(--bg-color) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 0 0 1px var(--border-color) inset !important;
+  }
+  
+  :deep(.el-select__selection) {
+    background-color: transparent !important;
+    color: var(--text-color-primary) !important;
+  }
+  
+  :deep(.el-select__selected-item) {
+    background-color: transparent !important;
+    color: var(--text-color-primary) !important;
+  }
+  
+  :deep(.el-select__input-wrapper) {
+    background-color: var(--bg-color) !important;
+    border-color: var(--border-color) !important;
+  }
+  
+  :deep(.el-select__placeholder) {
+    color: var(--text-color-secondary) !important;
+  }
+  
+  // 基于开发者工具中看到的实际DOM结构
+  :deep(.el-select) {
+    .el-select__wrapper {
+      background-color: var(--bg-color) !important;
+      border-color: var(--border-color) !important;
+      box-shadow: 0 0 0 1px var(--border-color) inset !important;
+    }
+    
+    .el-select__selection {
+      color: var(--text-color-primary) !important;
+    }
+    
+    .el-select__selected-item {
+      color: var(--text-color-primary) !important;
+    }
+    
+    .el-select__placeholder {
+      color: var(--text-color-secondary) !important;
+    }
+    
+    .el-select__input-wrapper {
+      background-color: var(--bg-color) !important;
+      border-color: var(--border-color) !important;
+    }
   }
 }
 </style>
