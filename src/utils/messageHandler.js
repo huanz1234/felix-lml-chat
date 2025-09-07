@@ -19,10 +19,38 @@ export const messageHandler = {
     let accumulatedContent = ''
     let accumulatedReasoning = ''
     let startTime = Date.now()
+    
+    // 批量更新相关变量
+    let batchUpdateTimer = null
+    let lastUpdateTime = Date.now()
+    const BATCH_UPDATE_INTERVAL = 100 // 100ms批量更新间隔
+    
+    // 批量更新函数
+    const performBatchUpdate = (tokens = 0) => {
+      const currentTime = Date.now()
+      const speed = tokens > 0 ? (tokens / ((currentTime - startTime) / 1000)).toFixed(2) : '0.00'
+      
+      updateCallback(
+        accumulatedContent,
+        accumulatedReasoning,
+        tokens,
+        speed
+      )
+      lastUpdateTime = currentTime
+    }
 
     while (true) {
       const { done, value } = await reader.read()
-      if (done) break
+      if (done) {
+        // 流结束时，清除定时器并执行最后一次更新
+        if (batchUpdateTimer) {
+          clearTimeout(batchUpdateTimer)
+          batchUpdateTimer = null
+        }
+        // 执行最终更新，确保所有内容都显示
+        performBatchUpdate()
+        break
+      }
 
       const chunk = decoder.decode(value)
       const lines = chunk.split('\n').filter((line) => line.trim() !== '')
@@ -37,13 +65,27 @@ export const messageHandler = {
           accumulatedContent += content
           accumulatedReasoning += reasoning
 
-          // 通过回调更新消息
-          updateCallback(
-            accumulatedContent,
-            accumulatedReasoning,
-            data.usage?.completion_tokens || 0,
-            ((data.usage?.completion_tokens || 0) / ((Date.now() - startTime) / 1000)).toFixed(2),
-          )
+          // 使用时间分片策略：只有当距离上次更新超过100ms时才更新UI
+          const currentTime = Date.now()
+          if (currentTime - lastUpdateTime >= BATCH_UPDATE_INTERVAL) {
+            // 立即更新
+            performBatchUpdate(data.usage?.completion_tokens || 0)
+            
+            // 清除之前的定时器
+            if (batchUpdateTimer) {
+              clearTimeout(batchUpdateTimer)
+              batchUpdateTimer = null
+            }
+          } else {
+            // 设置延迟更新，确保在间隔时间后更新
+            if (!batchUpdateTimer) {
+              const remainingTime = BATCH_UPDATE_INTERVAL - (currentTime - lastUpdateTime)
+              batchUpdateTimer = setTimeout(() => {
+                performBatchUpdate(data.usage?.completion_tokens || 0)
+                batchUpdateTimer = null
+              }, remainingTime)
+            }
+          }
         }
       }
     }
