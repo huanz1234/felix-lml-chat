@@ -31,8 +31,8 @@ const isDisliked = ref(false)
 // 添加复制状态
 const isCopied = ref(false)
 
-// 添加重新生成的事件
-const emit = defineEmits(['regenerate'])
+// 添加重新生成和高度变化的事件
+const emit = defineEmits(['regenerate', 'resize'])
 
 // 添加展开/折叠状态控制
 const isReasoningExpanded = ref(true)
@@ -40,7 +40,36 @@ const isReasoningExpanded = ref(true)
 // 切换展开/折叠状态
 const toggleReasoning = () => {
   isReasoningExpanded.value = !isReasoningExpanded.value
+  // 高度变化时通知父组件
+  emit('resize')
 }
+
+// 监听高度变化的函数
+const notifyResize = () => {
+  emit('resize')
+}
+
+// 在组件挂载后监听可能的高度变化
+onMounted(() => {
+  // 监听图片加载完成
+  const images = document.querySelectorAll('img')
+  images.forEach(img => {
+    img.addEventListener('load', notifyResize)
+    img.addEventListener('error', notifyResize)
+  })
+  
+  // 初始化时通知一次
+  notifyResize()
+})
+
+onUnmounted(() => {
+  // 清理事件监听器
+  const images = document.querySelectorAll('img')
+  images.forEach(img => {
+    img.removeEventListener('load', notifyResize)
+    img.removeEventListener('error', notifyResize)
+  })
+})
 
 // 处理复制函数
 const handleCopy = async () => {
@@ -238,10 +267,22 @@ const renderedReasoning = computed(() => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
+/* 消息容器的基础样式 */
+.message {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+  padding: 1rem;
+  background-color: var(--message-bg);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  position: relative;
+  transition: background-color 0.2s;
+}
 .message-item {
   display: flex; /* 使用弹性布局 */
-  margin-bottom: 2rem; /* 消息之间的垂直间距 */
+  margin-bottom: 0.5rem; /* 消息之间的垂直间距 */
 
   &.is-mine {
     justify-content: flex-end; /* 用户消息靠右对齐 */
@@ -290,12 +331,6 @@ const renderedReasoning = computed(() => {
       padding: 4px 8px;
       margin-left: 16px;
       margin-bottom: 8px;
-      cursor: pointer;
-      width: fit-content;
-      border-radius: 4px;
-      background-color: var(--bg-color); // 添加背景
-      border: 1px solid var(--border-color);
-      transition: background-color 0.2s;
 
       img {
         width: 14px;

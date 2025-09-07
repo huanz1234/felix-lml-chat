@@ -18,24 +18,40 @@ const currentMessages = computed(() => chatStore.currentMessages)
 const isLoading = computed(() => chatStore.isLoading)
 const settingStore = useSettingStore()
 
-// 获取消息容器
+// 获取消息容器和虚拟滚动器
 const messagesContainer = ref(null)
+const dynamicScroller = ref(null)
+// 处理消息高度变化
+const handleMessageResize = () => {
+  if (dynamicScroller.value) {
+    // 强制重新计算所有项目的高度
+    nextTick(() => {
+      dynamicScroller.value.forceUpdate()
+    })
+  }
+}
+
+// 滚动到底部
+const scrollToBottom = () => {
+  if (dynamicScroller.value && currentMessages.value.length > 0) {
+    nextTick(() => {
+      dynamicScroller.value.scrollToBottom()
+    })
+  }
+}
+
 // 监听消息变化，滚动到底部
 watch(
   currentMessages,
   () => {
-    nextTick(() => {
-      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
-    })
+    scrollToBottom()
   },
   { deep: true },
 )
 
 onMounted(() => {
   // 每次页面刷新时，将消息容器滚动到底部
-  nextTick(() => {
-    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
-  })
+  scrollToBottom()
   // 当没有对话时，默认新建一个对话
   if (chatStore.conversations.length === 0) {
     chatStore.createConversation()
@@ -159,15 +175,40 @@ const handleBack = async () => {
     <!-- 消息容器，显示对话消息 -->
     <div class="messages-container" ref="messagesContainer">
       <template v-if="currentMessages.length > 0">
-        <chat-message
-          v-for="(message, index) in currentMessages"
-          :key="message.id"
-          :message="message"
-          :is-last-assistant-message="
-            index === currentMessages.length - 1 && message.role === 'assistant'
-          "
-          @regenerate="handleRegenerate"
-        />
+        <DynamicScroller
+          :items="currentMessages"
+          :min-item-size="120"
+          class="dynamic-scroller"
+          key-field="id"
+          ref="dynamicScroller"
+          :buffer="200"
+          :prerender="5"
+          :emit-update="true"
+        >
+          <template v-slot="{ item, index, active }">
+            <DynamicScrollerItem
+              :item="item"
+              :active="active"
+              :size-dependencies="[
+                item.content,
+                item.reasoning_content,
+                item.files,
+                item.id
+              ]"
+              :data-index="index"
+              class="message-item-wrapper"
+            >
+              <chat-message
+                :message="item"
+                :is-last-assistant-message="
+                  index === currentMessages.length - 1 && item.role === 'assistant'
+                "
+                @regenerate="handleRegenerate"
+                @resize="handleMessageResize"
+              />
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
       </template>
       <div v-else class="empty-state">
         <div class="empty-content">
@@ -359,7 +400,7 @@ const handleBack = async () => {
 /* 定义消息容器的样式 */
 .messages-container {
   flex: 1; /* 占据剩余空间 */
-  overflow-y: auto; /* 垂直方向可滚动 */
+  overflow: hidden; /* 隐藏溢出，由虚拟滚动器处理 */
   padding: 0.6rem; /* 四周内边距 */
   background-color: var(--bg-color); /* 使用主题变量设置背景色 */
 
@@ -369,18 +410,54 @@ const handleBack = async () => {
   margin: 0 auto; /* 水平居中 */
   width: 100%; /* 在最大宽度范围内占满宽度 */
 
-  /* 自定义滚动条样式 */
-  &::-webkit-scrollbar {
-    width: 6px; /* 滚动条宽度 */
-  }
+  /* 动态虚拟滚动器样式 */
+  .dynamic-scroller {
+    height: 100%;
+    width: 100%;
+    
+    /* 自定义滚动条样式 */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
 
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--border-color); /* 滚动条滑块颜色 */
-    border-radius: 3px; /* 滚动条滑块圆角 */
-  }
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--border-color);
+      border-radius: 3px;
+    }
 
-  &::-webkit-scrollbar-track {
-    background-color: transparent; /* 滚动条轨道透明 */
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+    
+    /* 确保深层滚动条样式生效 */
+    :deep(.vue-recycle-scroller) {
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: var(--border-color);
+        border-radius: 3px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+    }
+  }
+  
+  /* 消息项包装器样式 */
+  .message-item-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 80px;
+  }
+  
+  /* 消息项内容样式 */
+  .message-item-content {
+    width: 100%;
+    padding: 0.75rem 0;
+    box-sizing: border-box;
   }
 }
 
